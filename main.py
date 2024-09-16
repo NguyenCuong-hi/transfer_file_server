@@ -10,7 +10,7 @@ from PyQt5.QtCore import QDir, QModelIndex
 from PyQt5.QtWidgets import QFileSystemModel
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
-PATH = os.path.abspath(os.path.join(current_dir, '..'))
+PATH = os.path.abspath(os.path.join(current_dir))
 
 
 def get_data_client():

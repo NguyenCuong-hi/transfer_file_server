@@ -1,0 +1,12 @@
+{
+    "name": "Server",
+    "ip": "127.0.0.1",
+    "port": 80,
+    "database": {
+        "host": "172.0.0.1",
+        "port": 3306,
+        "username": "admin",
+        "password": "admin",
+        "schema": "test"
+    }
+}

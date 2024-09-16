@@ -47,14 +47,22 @@ class ListeningThread(QThread):
 
     def handle_client(self, client_socket, client_address):
         try:
-            while True:
-                data = client_socket.recv(1024).decode('utf-8')
-                if not data:
-                    break
-                self.transfer_progress.emit(f"Received from {client_address}: {data}")
-
-                response = "Data received"
-                client_socket.send(response.encode('utf-8'))
+            file_info = client_socket.recv(1024).decode('utf-8')
+            if file_info == 'PING':
+                print(f"Ping received from {client_address}, no action taken.")
+            else:
+                file_name, file_size = file_info.split('|')
+                with open(file_name, 'w') as f:
+                    total_received = 0
+                    
+                    while total_received < file_size:
+                        data = client_socket.recv(1024).decode('utf-8')
+                        if not data:
+                            break
+                        self.transfer_progress.emit(f"Received from {client_address}: {data}")
+                        f.write(data)
+                        total_received += len(data)
+                        print(f"Received data from{client_address}: {data}")
 
         except Exception as e:
             self.transfer_progress.emit(f"Error handling client {client_address}: {str(e)}")
