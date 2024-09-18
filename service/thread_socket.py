@@ -57,17 +57,19 @@ class ListeningThread(QThread):
         #     return
         try:
             # file_name, file_size = file_info.split('|')
-            with open(file_name, 'wb') as f:
+            with open(file_name, 'w', encoding='utf-8') as f:
                 total_received = 0
 
                 while total_received < file_size:
-                    data = client_socket.recv(1024)
+                    data = client_socket.recv(1024).decode('utf-8')
                     if not data:
                         break
                     self.transfer_progress.emit(f"Received from {client_address}: {data}")
                     f.write(data)
                     total_received += len(data)
                     print(f"Received data from{client_address}: {data}")
+                    f.close()
+                    client_socket.close()
         except Exception as e:
             self.transfer_progress.emit(f"Error handling client {client_address}: {str(e)}")
             print(f"Error handling client {client_address}: {str(e)}")
